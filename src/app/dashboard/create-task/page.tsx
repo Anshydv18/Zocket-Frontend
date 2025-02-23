@@ -34,7 +34,7 @@ export default function TaskForm({ onTaskAdded = () => {} }: { onTaskAdded?: (ta
 
         const updatedTask = {
             ...taskData,
-            created_by: userData?.email || "unknown",
+            created_by: userData?.Email || "unknown",
             deadline: new Date(taskData.deadline).toISOString(),
         };
 

@@ -1,23 +1,25 @@
 "use client";
 import Image from "next/image";
-import MainImage from '../../public/MainImage.jpg';
+import MainImage from '../../../public/MainImage.jpg'
 import { useState } from "react";
 import { useRouter } from "next/navigation"; 
 
-interface LoginData {
+interface SignUpData {
+  name: string;
   email: string;
   password: string;
 }
 
-export default function Home() {
+export default function SignUp() {
   const router = useRouter();  
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<LoginData>({
+  const [formData, setFormData] = useState<SignUpData>({
+    name: "",
     email: "",
     password: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -26,7 +28,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/user/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER}/api/user/createUser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,12 +42,12 @@ export default function Home() {
       if (response.ok) { 
         localStorage.setItem("user_data", JSON.stringify(data.UserData));
 
-        router.push("/dashboard");
+        router.push("/");
       } else {
-        console.error("Login failed:", data.error);
+        console.error("Sign Up failed:", data.error);
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during sign up:", error);
     } finally {
       setLoading(false);
     }
@@ -63,16 +65,30 @@ export default function Home() {
       <div className="absolute bottom-8 right-8 flex flex-col items-center justify-center w-96 mx-auto">
         <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
           <h1 className="text-3xl font-semibold text-center text-gray-300">
-            Login <span className="text-blue-500">Todo</span>
+            Sign Up <span className="text-blue-500">Todo</span>
           </h1>
           <form>
             <div>
               <label className="label p-2">
-                <span className="text-base label-text text-blue-500">Username</span>
+                <span className="text-base label-text text-blue-500">Name</span>
               </label>
               <input
                 type="text"
-                placeholder="Enter Username"
+                placeholder="Enter Name"
+                className="w-full input input-bordered h-10"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label className="label p-2">
+                <span className="text-base label-text text-blue-500">Email</span>
+              </label>
+              <input
+                type="email"
+                placeholder="Enter Email"
                 className="w-full input input-bordered h-10"
                 name="email"
                 value={formData.email}
@@ -93,8 +109,8 @@ export default function Home() {
                 onChange={handleChange}
               />
             </div>
-           
-            <div className="mb-12 text-center w-full">
+            
+            <div className="mb-4 text-center w-full">
               {loading ? (
                 <div className="loading loading-spinner loading-md" />
               ) : (
@@ -102,17 +118,18 @@ export default function Home() {
                   className="btn btn-block btn-sm w-full mt-2 h-10 text-blue-500 hover:bg-blue-500 hover:text-white"
                   onClick={handleSubmit}
                 >
-                  Login
+                  Sign Up
                 </button>
               )}
             </div>
+
             <p className="text-center text-sm text-gray-300">
-              Dont't have an account? 
+              Already have an account? 
               <span
                 className="text-blue-500 cursor-pointer ml-1"
-                onClick={() => router.push("/signup")}
+                onClick={() => router.push("/")}
               >
-                Signup here
+                Login here
               </span>
             </p>
           </form>

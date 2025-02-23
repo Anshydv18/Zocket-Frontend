@@ -119,7 +119,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                 <p><strong>Progress:</strong> {task.progress}</p>
                                 <p><strong>Deadline:</strong> {task.deadline}</p>
                                 <p><strong>Assigned to:</strong> {task.assigneeEmail}</p>
-                                <p><strong>Created by:</strong> {task.created_by}</p>
                             </div>
                             <button
                                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
